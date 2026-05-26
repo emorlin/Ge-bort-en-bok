@@ -14,16 +14,17 @@ function BookCover() {
 }
 
 function BookCard({ book }) {
-  const q = encodeURIComponent(book.title + ' ' + book.author)
-  const isbn = book.isbn?.replace(/[^0-9X]/gi, '')
-  const validIsbn = isbn && (isbn.length === 13 || isbn.length === 10)
-  const infoUrl = validIsbn
-    ? `https://openlibrary.org/isbn/${isbn}`
-    : `https://www.google.com/search?q=${q}`
-  const infoLabel = validIsbn ? 'Open Library' : 'Googla'
+  const q           = encodeURIComponent(book.title + ' ' + book.author)
+  const bokusUrl    = `https://www.bokus.com/cgi-bin/product_search.cgi?search_word=${q}`
+  const adlibrisUrl = `https://www.adlibris.com/se/sok?search=${q}`
+  const akademiUrl  = `https://www.akademibokhandeln.se/search/?q=${q}`
+  const googleUrl   = `https://books.google.com/books?q=${q}`
 
   const stores = [
-    { href: infoUrl, label: infoLabel },
+    { href: bokusUrl,    label: 'Bokus' },
+    { href: adlibrisUrl, label: 'Adlibris' },
+    { href: akademiUrl,  label: 'Akademi' },
+    { href: googleUrl,   label: 'Google Books' },
   ]
 
   return (
@@ -37,7 +38,9 @@ function BookCard({ book }) {
           <span>{book.year}</span>
         </p>
         <p className="text-sm text-ink/80 mt-2 leading-relaxed">{book.reason}</p>
-        <div className="flex gap-2 mt-3.5">
+        <div className="mt-3.5">
+          <p className="text-[11px] font-semibold text-muted uppercase tracking-wide mb-2">Hitta boken på</p>
+          <div className="flex flex-wrap gap-2">
           {stores.map(({ href, label }) => (
             <a
               key={label}
@@ -50,6 +53,7 @@ function BookCard({ book }) {
               {label} <span aria-hidden="true">↗</span>
             </a>
           ))}
+          </div>
         </div>
       </div>
     </article>
