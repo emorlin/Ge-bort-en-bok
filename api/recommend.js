@@ -72,7 +72,8 @@ export default async function handler(req) {
     }
 
     const anthropicData = await anthropicRes.json();
-    const text = anthropicData.content?.[0]?.text ?? "";
+    const raw = anthropicData.content?.[0]?.text ?? "";
+    const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
 
     let parsed;
     try {
