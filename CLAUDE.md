@@ -1,6 +1,6 @@
-# Bokpresent
+# Ge bort en bok
 
-Webb-app som hjälper användare hitta rätt bok som present. Användaren fyller i ett kort formulär om mottagaren; appen returnerar 4 konkreta bokförslag med motivering och köplänkar till svenska bokhandlare.
+Webb-app på gebortenbok.se som hjälper användare hitta rätt bok som present. Användaren fyller i ett kort formulär om mottagaren; appen returnerar 4 konkreta bokförslag med motivering och köplänkar till svenska bokhandlare.
 
 ## Tech stack
 

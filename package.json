@@ -1,5 +1,5 @@
 {
-  "name": "bokpresent",
+  "name": "ge-bort-en-bok",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
+    "lucide-react": "^1.16.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.15.1",

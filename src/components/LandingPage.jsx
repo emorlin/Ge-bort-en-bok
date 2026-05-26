@@ -1,59 +1,58 @@
 import { useNavigate } from 'react-router-dom'
+import Logo from './Logo'
+
+const STEPS = [
+  { n: '1', label: 'Berätta om personen' },
+  { n: '2', label: 'AI väljer böcker' },
+  { n: '3', label: 'Köp direkt' },
+]
 
 export default function LandingPage() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16">
-      <div className="w-full max-w-lg text-center">
+    <main id="main-content" className="min-h-screen flex flex-col items-center justify-center px-5 py-16">
+      <div className="w-full max-w-md text-center">
 
-        {/* Logotyp */}
-        <p className="text-sm font-semibold tracking-widest text-indigo-600 uppercase mb-6">
-          Bokpresent
-        </p>
+        <div className="mb-8 flex justify-center">
+          <Logo />
+        </div>
 
-        {/* Headline */}
-        <h1 className="text-5xl font-bold text-gray-900 leading-tight mb-4">
+        <h1 className="font-display text-5xl leading-[1.1] text-ink mb-5">
           Rätt bok.<br />Till rätt person.
         </h1>
 
-        {/* Subtext */}
-        <p className="text-lg text-gray-500 mb-10">
+        <p className="text-[17px] text-muted leading-relaxed mb-10 max-w-sm mx-auto">
           Berätta om den du köper till — vi hittar en bok de faktiskt kommer läsa.
         </p>
 
-        {/* CTA */}
         <button
           onClick={() => navigate('/hitta')}
-          className="inline-block bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-lg font-medium px-8 py-4 rounded-xl transition-colors cursor-pointer"
+          className="bg-primary hover:bg-[#874819] active:bg-[#6E3A14] text-white text-base font-semibold px-9 py-4 rounded-2xl transition-colors duration-150 cursor-pointer shadow-card-lg"
         >
-          Hitta en bok →
+          Hitta en bok <span aria-hidden="true">→</span>
         </button>
 
-        {/* Steg-förklaring */}
-        <div className="mt-14 grid grid-cols-3 gap-4">
-          {[
-            { n: '1', label: 'Beskriv personen' },
-            { n: '2', label: 'AI väljer böcker' },
-            { n: '3', label: 'Köp direkt' },
-          ].map(({ n, label }) => (
-            <div key={n} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-              <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 font-bold text-sm flex items-center justify-center mx-auto mb-3">
+        <ol aria-label="Så här fungerar det" className="mt-14 grid grid-cols-3 gap-3 list-none">
+          {STEPS.map(({ n, label }) => (
+            <li key={n} className="bg-surface rounded-2xl p-5 shadow-card">
+              <div aria-hidden="true" className="w-7 h-7 rounded-full bg-primary-light text-primary font-bold text-xs flex items-center justify-center mx-auto mb-3">
                 {n}
               </div>
-              <p className="text-sm font-medium text-gray-700">{label}</p>
-            </div>
+              <p className="text-[13px] font-medium text-ink leading-snug">{label}</p>
+            </li>
           ))}
-        </div>
+        </ol>
 
-        {/* Trustsignaler */}
-        <div className="mt-8 pt-8 border-t border-gray-200 flex items-center justify-center gap-6 text-sm text-gray-400">
-          <span>🔒 Ingen registrering</span>
-          <span>👁 Inget sparas</span>
-          <span>⏱ 30 sekunder</span>
-        </div>
+        <ul aria-label="Fördelar" className="mt-10 pt-8 border-t border-rule flex items-center justify-center gap-7 text-[13px] text-muted list-none">
+          <li>Ingen registrering</li>
+          <li aria-hidden="true" className="w-px h-3 bg-rule" />
+          <li>Inget sparas</li>
+          <li aria-hidden="true" className="w-px h-3 bg-rule" />
+          <li>30 sekunder</li>
+        </ul>
 
       </div>
-    </div>
+    </main>
   )
 }

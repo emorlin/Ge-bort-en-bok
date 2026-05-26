@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, Navigate } from 'react-router-dom'
+import Logo from './Logo'
 
 function BookCover({ isbn, title }) {
   const [src, setSrc] = useState(null)
@@ -20,56 +21,65 @@ function BookCover({ isbn, title }) {
     return (
       <img
         src={src}
-        alt={title}
-        className="w-16 h-24 object-cover rounded shadow-sm shrink-0"
+        alt=""
+        className="w-13 h-19 object-cover rounded-lg shadow-card shrink-0"
       />
     )
   }
 
   return (
-    <div className="w-16 h-24 bg-indigo-100 rounded shadow-sm flex items-center justify-center shrink-0">
-      <span className="text-2xl">📚</span>
+    <div
+      aria-hidden="true"
+      className="w-13 h-19 bg-primary-light rounded-lg shadow-card flex items-center justify-center shrink-0"
+    >
+      <span>📖</span>
     </div>
   )
 }
 
 function BookCard({ book }) {
-  const bokusUrl = `https://www.bokus.com/cgi-bin/product_search.cgi?search_word=${encodeURIComponent(book.title + ' ' + book.author)}`
+  const bokusUrl    = `https://www.bokus.com/cgi-bin/product_search.cgi?search_word=${encodeURIComponent(book.title + ' ' + book.author)}`
   const adlibrisUrl = `https://www.adlibris.com/se/sok?search=${encodeURIComponent(book.title + ' ' + book.author)}`
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex gap-4">
+    <article className="bg-surface rounded-2xl shadow-card p-5 flex gap-4">
       <BookCover isbn={book.isbn} title={book.title} />
       <div className="flex flex-col flex-1 min-w-0">
-        <h3 className="font-semibold text-gray-900 text-base leading-snug">{book.title}</h3>
-        <p className="text-sm text-gray-500 mt-0.5">{book.author} · {book.year}</p>
-        <p className="text-sm text-gray-600 mt-2 leading-relaxed">{book.reason}</p>
-        <div className="flex gap-2 mt-3">
+        <h2 className="font-display text-[17px] leading-snug text-ink">{book.title}</h2>
+        <p className="text-xs text-muted mt-0.5 font-medium">
+          <span>{book.author}</span>
+          <span aria-hidden="true"> · </span>
+          <span>{book.year}</span>
+        </p>
+        <p className="text-sm text-ink/80 mt-2 leading-relaxed">{book.reason}</p>
+        <div className="flex gap-2 mt-3.5">
           <a
             href={bokusUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-medium px-3 py-1.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+            aria-label={`Köp ${book.title} på Bokus (öppnas i ny flik)`}
+            className="text-xs font-semibold px-3 py-1.5 border border-rule rounded-lg text-ink hover:border-primary hover:text-primary transition-colors"
           >
-            Bokus ↗
+            Bokus <span aria-hidden="true">↗</span>
           </a>
           <a
             href={adlibrisUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-medium px-3 py-1.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+            aria-label={`Köp ${book.title} på Adlibris (öppnas i ny flik)`}
+            className="text-xs font-semibold px-3 py-1.5 border border-rule rounded-lg text-ink hover:border-primary hover:text-primary transition-colors"
           >
-            Adlibris ↗
+            Adlibris <span aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
-    </div>
+    </article>
   )
 }
 
 export default function ResultsPage() {
   const { state } = useLocation()
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
 
   if (!state?.books) return <Navigate to="/hitta" replace />
 
@@ -82,47 +92,49 @@ export default function ResultsPage() {
   ].filter(Boolean).join(' · ')
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-10">
-      <div className="w-full max-w-lg">
+    <main id="main-content" tabIndex={-1} className="min-h-screen flex flex-col items-center px-5 py-10">
+      <div className="w-full max-w-md">
 
-        {/* Header */}
+        <div className="mb-7">
+          <Logo />
+        </div>
+
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="font-display text-3xl text-ink leading-tight">
             4 böcker för din {relation?.toLowerCase()}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Baserat på: {summary}</p>
+          <p className="text-sm text-muted mt-1.5">{summary}</p>
         </div>
 
-        {/* Bokkort */}
-        <div className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-4 list-none">
           {books.map((book, i) => (
-            <BookCard key={i} book={book} />
+            <li key={i}>
+              <BookCard book={book} />
+            </li>
           ))}
-        </div>
+        </ul>
 
-        {/* Knappar */}
-        <div className="flex gap-3 mt-8">
+        <div className="mt-8">
           <button
             onClick={() => navigate('/hitta')}
-            className="flex-1 py-3 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+            className="w-full py-3.5 border border-rule rounded-2xl text-sm font-semibold text-ink hover:border-primary hover:text-primary transition-colors cursor-pointer bg-surface shadow-card"
           >
             Sök igen
           </button>
         </div>
 
-        {/* Statistik */}
-        <div className="mt-10 pt-8 border-t border-gray-200 flex justify-between">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-gray-900">5 832</p>
-            <p className="text-xs text-gray-500 mt-1">böcker rekommenderade totalt</p>
+        <dl className="mt-10 pt-8 border-t border-rule grid grid-cols-2 gap-4 text-center">
+          <div>
+            <dd className="font-display text-4xl text-primary">5 832</dd>
+            <dt className="text-xs text-muted mt-1">böcker rekommenderade totalt</dt>
           </div>
-          <div className="text-center">
-            <p className="text-3xl font-bold text-gray-900">1 204</p>
-            <p className="text-xs text-gray-500 mt-1">unika titlar</p>
+          <div>
+            <dd className="font-display text-4xl text-primary">1 204</dd>
+            <dt className="text-xs text-muted mt-1">unika titlar</dt>
           </div>
-        </div>
+        </dl>
 
       </div>
-    </div>
+    </main>
   )
 }
