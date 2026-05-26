@@ -26,22 +26,24 @@ function LoadingOverlay() {
       aria-label={LOADING_MESSAGES[msgIndex]}
       className="fixed inset-0 bg-background/85 backdrop-blur-sm flex flex-col items-center justify-center gap-10"
     >
-      <div className="flex gap-3" aria-hidden="true">
-        {[0, 1, 2, 3].map(i => (
-          <div
-            key={i}
-            style={{ animationDelay: `${i * 160}ms` }}
-            className="w-12 h-[72px] bg-primary-light rounded-xl flex items-center justify-center animate-pulse shadow-card"
-          >
-            <BookOpen className="w-6 h-6 text-primary" strokeWidth={1.5} />
-          </div>
-        ))}
-      </div>
-      <div className="text-center">
-        <p key={msgIndex} className="font-display text-2xl text-ink animate-fade-up">
-          {LOADING_MESSAGES[msgIndex]}
-        </p>
-        <p className="text-sm text-muted mt-2">AI arbetar på saken</p>
+      <div className="bg-surface rounded-3xl shadow-card-lg px-10 py-10 flex flex-col items-center gap-8">
+        <div className="flex gap-3" aria-hidden="true">
+          {[0, 1, 2, 3].map(i => (
+            <div
+              key={i}
+              style={{ animationDelay: `${i * 160}ms` }}
+              className="w-12 h-18 bg-primary-light rounded-xl flex items-center justify-center animate-pulse shadow-card"
+            >
+              <BookOpen className="w-6 h-6 text-primary" strokeWidth={1.5} />
+            </div>
+          ))}
+        </div>
+        <div className="text-center">
+          <p key={msgIndex} className="font-display text-2xl text-ink animate-fade-up">
+            {LOADING_MESSAGES[msgIndex]}
+          </p>
+          <p className="text-sm text-muted mt-2">AI arbetar på saken</p>
+        </div>
       </div>
     </div>
   )
