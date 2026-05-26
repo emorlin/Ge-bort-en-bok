@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { Github } from 'lucide-react'
 import Logo from './Logo'
 
 const STEPS = [
@@ -51,6 +52,18 @@ export default function LandingPage() {
           <li aria-hidden="true" className="w-px h-3 bg-rule" />
           <li>30 sekunder</li>
         </ul>
+
+        <div className="mt-8 flex justify-center">
+          <a
+            href="https://github.com/emorlin/Ge-bort-en-bok"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-[12px] text-muted hover:text-primary transition-colors"
+          >
+            <Github className="w-3.5 h-3.5" aria-hidden="true" />
+            emorlin/Ge-bort-en-bok
+          </a>
+        </div>
 
       </div>
     </main>
