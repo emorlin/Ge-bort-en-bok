@@ -1,13 +1,14 @@
 import { useLocation, useNavigate, Navigate } from 'react-router-dom'
+import { BookOpen } from 'lucide-react'
 import Logo from './Logo'
 
 function BookCover() {
   return (
     <div
       aria-hidden="true"
-      className="w-13 h-19 bg-primary-light rounded-lg shadow-card flex items-center justify-center shrink-0"
+      className="w-13 h-19 rounded-lg shadow-card shrink-0 flex items-center justify-center bg-linear-to-br from-[#f5e6d8] to-primary-light"
     >
-      <span>📖</span>
+      <BookOpen className="w-6 h-6 text-primary opacity-60" strokeWidth={1.5} />
     </div>
   )
 }
