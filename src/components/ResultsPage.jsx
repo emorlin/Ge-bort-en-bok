@@ -23,7 +23,7 @@ function BookCard({ book }) {
   const stores = [
     { href: bokusUrl,    label: 'Bokus' },
     { href: adlibrisUrl, label: 'Adlibris' },
-    { href: akademiUrl,  label: 'Akademi' },
+    { href: akademiUrl,  label: 'Akademibokhandeln' },
     { href: googleUrl,   label: 'Google Books' },
   ]
 
