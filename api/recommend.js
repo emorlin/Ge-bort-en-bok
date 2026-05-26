@@ -21,6 +21,8 @@ function buildUserPrompt({ relation, giftType, age, budget, interests, occasion,
 Ge exakt 4 bokrekommendationer i detta format:
 {"books":[{"title":"...","author":"...","year":2019,"isbn":"...","reason":"..."}]}
 
+Välj ENDAST välkända, verkliga böcker som sålts brett — bestsellers, pristagare eller klassiker. Välj hellre en välkänd bok i ett angränsande ämne än en okänd bok i exakt rätt ämne.
+
 Skriv reason på svenska. En mening. Förklara varför just denna person — inte boken generellt. Texten ska inte vara riktiad till den som ska få boken utan till den som ska köpa den. Var specifik utifrån mottagaren och relationen. Undvik generella fraser som "en bok för alla som gillar X". Var kreativ och personlig i dina rekommendationer!`;
 }
 
