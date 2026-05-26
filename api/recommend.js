@@ -1,4 +1,4 @@
-export const config = { maxDuration: 30 };
+export const config = { runtime: 'edge' };
 
 const SYSTEM_PROMPT = `Du är en erfaren bokhandlare som rekommenderar böcker som present.
 Välj verkliga, välkända böcker som faktiskt finns. Variera genre och stil.
