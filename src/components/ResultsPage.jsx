@@ -19,10 +19,18 @@ function BookCard({ book }) {
   const adlibrisUrl   = `https://www.adlibris.com/se/sok?search=${q}`
   const akademiUrl    = `https://www.akademibokhandeln.se/search/?q=${q}`
 
+  const isbn = book.isbn?.replace(/[^0-9X]/gi, '')
+  const validIsbn = isbn && (isbn.length === 13 || isbn.length === 10)
+  const infoUrl = validIsbn
+    ? `https://openlibrary.org/isbn/${isbn}`
+    : `https://www.google.com/search?q=${q}`
+  const infoLabel = validIsbn ? 'Open Library' : 'Googla'
+
   const stores = [
     { href: bokusUrl,    label: 'Bokus' },
     { href: adlibrisUrl, label: 'Adlibris' },
     { href: akademiUrl,  label: 'Akademi' },
+    { href: infoUrl,     label: infoLabel },
   ]
 
   return (
