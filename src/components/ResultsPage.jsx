@@ -14,11 +14,7 @@ function BookCover() {
 }
 
 function BookCard({ book }) {
-  const q             = encodeURIComponent(book.title + ' ' + book.author)
-  const bokusUrl      = `https://www.bokus.com/cgi-bin/product_search.cgi?search_word=${q}`
-  const adlibrisUrl   = `https://www.adlibris.com/se/sok?search=${q}`
-  const akademiUrl    = `https://www.akademibokhandeln.se/search/?q=${q}`
-
+  const q = encodeURIComponent(book.title + ' ' + book.author)
   const isbn = book.isbn?.replace(/[^0-9X]/gi, '')
   const validIsbn = isbn && (isbn.length === 13 || isbn.length === 10)
   const infoUrl = validIsbn
@@ -27,10 +23,7 @@ function BookCard({ book }) {
   const infoLabel = validIsbn ? 'Open Library' : 'Googla'
 
   const stores = [
-    { href: bokusUrl,    label: 'Bokus' },
-    { href: adlibrisUrl, label: 'Adlibris' },
-    { href: akademiUrl,  label: 'Akademi' },
-    { href: infoUrl,     label: infoLabel },
+    { href: infoUrl, label: infoLabel },
   ]
 
   return (
