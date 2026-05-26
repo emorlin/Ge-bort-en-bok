@@ -385,7 +385,7 @@ export default function FormPage() {
               className="w-4 h-4 rounded border-rule accent-primary cursor-pointer"
             />
             <span className="text-sm text-ink group-hover:text-primary transition-colors">
-              Endast svenska titlar
+              Jag föredrar böcker på svenska
             </span>
           </label>
 
