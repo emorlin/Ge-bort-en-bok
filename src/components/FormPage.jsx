@@ -24,7 +24,7 @@ function LoadingOverlay() {
       role="status"
       aria-live="polite"
       aria-label={LOADING_MESSAGES[msgIndex]}
-      className="fixed inset-0 bg-background flex flex-col items-center justify-center gap-10"
+      className="fixed inset-0 bg-background/85 backdrop-blur-sm flex flex-col items-center justify-center gap-10"
     >
       <div className="flex gap-3" aria-hidden="true">
         {[0, 1, 2, 3].map(i => (
