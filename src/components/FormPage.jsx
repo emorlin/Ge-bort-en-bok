@@ -4,7 +4,7 @@ import Logo from './Logo'
 
 const RELATIONS  = ['Partner', 'Förälder', 'Vän', 'Kollega', 'Syskon', 'Barn']
 const GIFT_TYPES = ['Omtänksamhet', 'Imponerande', 'Rolig', 'Praktisk', 'Samtalsstartare', 'Inspiration', 'Äventyr', 'Nostalgi', 'Nyfikenhet', 'Kärlek']
-const INTERESTS  = ['Historia', 'Psykologi', 'Thriller', 'Filosofi', 'Humor', 'Biografi', 'Natur', 'Ekonomi', 'Skönlitteratur', 'Sport', 'Krim', 'Romantik', 'Fantasy', 'Vetenskap', 'Resor', 'Konst', 'Politik', 'Hälsa', 'Sci-fi', 'Musik']
+const INTERESTS  = ['Historia', 'Psykologi', 'Thriller', 'Filosofi', 'Humor', 'Biografi', 'Natur', 'Ekonomi', 'Skönlitteratur', 'Sport', 'Krim', 'Romantik', 'Fantasy', 'Vetenskap', 'Resor', 'Konst', 'Politik', 'Hälsa', 'Sci-fi', 'Musik', 'Självhjälp']
 const BUDGETS    = ['Under 150 kr', '150–300 kr', '300–500 kr', '500+ kr']
 const OCCASIONS  = ['Födelsedag', 'Jul', 'Student', 'Uppskattning', 'Avtack', 'Annat']
 
