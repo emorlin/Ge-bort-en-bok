@@ -10,7 +10,7 @@ function buildUserPrompt({ relation, giftType, age, budget, interests, occasion,
         `Presentens syfte: ${giftType}.`,
         `Intressen: ${interests.join(", ")}.`,
         occasion && `Tillfälle: ${occasion}.`,
-        `Budget: ${budget}.`,
+        budget ? `Budget: ${budget}.` : `Budget: ingen begränsning.`,
         freeText && freeText.trim() && freeText.trim(),
     ].filter(Boolean);
 
@@ -20,6 +20,26 @@ Ge exakt 4 bokrekommendationer i detta format:
 {"books":[{"title":"...","author":"...","year":2019,"isbn":"...","reason":"..."}]}
 
 Skriv reason på svenska. En mening. Förklara varför just denna person — inte boken generellt. Texten ska inte vara riktiad till den som ska få boken utan till den som ska köpa den. Var specifik utifrån mottagaren och relationen. Undvik generella fraser som "en bok för alla som gillar X". Var kreativ och personlig i dina rekommendationer!`;
+}
+
+async function fetchCover(title, author) {
+    try {
+        const q = encodeURIComponent(`intitle:${title} inauthor:${author}`)
+        const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&fields=items(volumeInfo/imageLinks)`)
+        const data = await res.json()
+        const thumb = data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail
+        if (thumb) return thumb.replace('http:', 'https:')
+    } catch {}
+
+    try {
+        const q = `title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}`
+        const res = await fetch(`https://openlibrary.org/search.json?${q}&limit=1&fields=cover_i`)
+        const data = await res.json()
+        const coverId = data?.docs?.[0]?.cover_i
+        if (coverId) return `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`
+    } catch {}
+
+    return null
 }
 
 export default async function handler(req) {
@@ -83,7 +103,14 @@ export default async function handler(req) {
         });
     }
 
-    return new Response(JSON.stringify(parsed), {
+    const books = await Promise.all(
+        parsed.books.map(async book => ({
+            ...book,
+            coverUrl: await fetchCover(book.title, book.author),
+        }))
+    );
+
+    return new Response(JSON.stringify({ books }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
     });

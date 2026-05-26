@@ -8,7 +8,7 @@ const INTERESTS  = ['Historia', 'Psykologi', 'Thriller', 'Filosofi', 'Humor', 'B
 const BUDGETS    = ['Under 150 kr', '150–300 kr', '300–500 kr', '500+ kr']
 const OCCASIONS  = ['Födelsedag', 'Jul', 'Student', 'Uppskattning', 'Avtack', 'Annat']
 
-const TOTAL_STEPS = 4
+const TOTAL_STEPS = 3
 
 function ProgressBar({ step }) {
   return (
@@ -123,16 +123,15 @@ export default function FormPage() {
   const interestsRef = useRef(null)
   const errorSummaryRef = useRef(null)
 
-  const step = [relation, giftType, budget, interests.length > 0].filter(Boolean).length
+  const step = [relation, giftType, interests.length > 0].filter(Boolean).length
 
   // Beräkna fel — visas bara efter att användaren försökt skicka
   const errors = {
-    relation:  !relation            ? 'Välj vem du köper till.'                    : null,
-    giftType:  !giftType            ? 'Välj vad presenten ska kommunicera.'         : null,
-    budget:    !budget              ? 'Välj en budget.'                             : null,
-    interests: interests.length < 1 ? 'Välj minst ett intresse.'                   : null,
+    relation:  !relation            ? 'Välj vem du köper till.'           : null,
+    giftType:  !giftType            ? 'Välj vad presenten ska kommunicera.' : null,
+    interests: interests.length < 1 ? 'Välj minst ett intresse.'           : null,
   }
-  const visibleErrors = submitted ? errors : { relation: null, giftType: null, budget: null, interests: null }
+  const visibleErrors = submitted ? errors : { relation: null, giftType: null, interests: null }
   const hasErrors = Object.values(visibleErrors).some(Boolean)
 
   async function handleSubmit(e) {
@@ -141,12 +140,10 @@ export default function FormPage() {
     setApiError(null)
 
     // Flytta fokus till sammanfattning om det finns fel — role="alert" annonserar till skärmläsare
-    if (!relation || !giftType || !budget || interests.length < 1) {
-      // Kort fördröjning så att DOM hinner rendera felbeskrivningarna innan fokus sätts
+    if (!relation || !giftType || interests.length < 1) {
       setTimeout(() => {
         if (!relation)            { relationRef.current?.focus();  return }
         if (!giftType)            { giftTypeRef.current?.focus();  return }
-        if (!budget)              { budgetRef.current?.focus();    return }
         if (interests.length < 1) { interestsRef.current?.focus(); return }
       }, 0)
       return
@@ -254,23 +251,17 @@ export default function FormPage() {
             <div className="flex-1">
               <label htmlFor="budget" className="block text-[13px] font-semibold text-ink tracking-wide uppercase mb-2.5">
                 Budget
-                <span aria-hidden="true" className="text-primary ml-1">*</span>
-                <span className="sr-only"> (obligatorisk)</span>
               </label>
               <select
                 id="budget"
                 ref={budgetRef}
                 value={budget}
                 onChange={e => setBudget(e.target.value)}
-                aria-required="true"
-                aria-invalid={!!visibleErrors.budget || undefined}
-                aria-describedby={visibleErrors.budget ? 'budget-error' : undefined}
-                className={visibleErrors.budget ? inputClassInvalid : inputClass}
+                className={inputClass}
               >
-                <option value="">Välj budget</option>
+                <option value="">Spelar ingen roll</option>
                 {BUDGETS.map(b => <option key={b} value={b}>{b}</option>)}
               </select>
-              <FieldError id="budget-error" message={visibleErrors.budget} />
             </div>
           </div>
 
