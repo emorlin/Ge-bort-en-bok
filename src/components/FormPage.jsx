@@ -1,6 +1,51 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BookOpen } from 'lucide-react'
 import Logo from './Logo'
+
+const LOADING_MESSAGES = [
+  'Söker bland böcker…',
+  'AI väljer ut favoriter…',
+  'Matchar med dina intressen…',
+  'Hittar rätt titlar…',
+  'Nästan klart…',
+]
+
+function LoadingOverlay() {
+  const [msgIndex, setMsgIndex] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => setMsgIndex(i => (i + 1) % LOADING_MESSAGES.length), 2200)
+    return () => clearInterval(id)
+  }, [])
+
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label={LOADING_MESSAGES[msgIndex]}
+      className="fixed inset-0 bg-background flex flex-col items-center justify-center gap-10"
+    >
+      <div className="flex gap-3" aria-hidden="true">
+        {[0, 1, 2, 3].map(i => (
+          <div
+            key={i}
+            style={{ animationDelay: `${i * 160}ms` }}
+            className="w-12 h-[72px] bg-primary-light rounded-xl flex items-center justify-center animate-pulse shadow-card"
+          >
+            <BookOpen className="w-6 h-6 text-primary" strokeWidth={1.5} />
+          </div>
+        ))}
+      </div>
+      <div className="text-center">
+        <p key={msgIndex} className="font-display text-2xl text-ink animate-fade-up">
+          {LOADING_MESSAGES[msgIndex]}
+        </p>
+        <p className="text-sm text-muted mt-2">AI arbetar på saken</p>
+      </div>
+    </div>
+  )
+}
 
 const RELATIONS  = ['Partner', 'Förälder', 'Vän', 'Kollega', 'Syskon', 'Barn']
 const GIFT_TYPES = ['Omtänksamhet', 'Imponerande', 'Rolig', 'Praktisk', 'Samtalsstartare', 'Inspiration', 'Äventyr', 'Nostalgi', 'Nyfikenhet', 'Kärlek']
@@ -170,6 +215,8 @@ export default function FormPage() {
   }
 
   return (
+    <>
+    {loading && <LoadingOverlay />}
     <main id="main-content" tabIndex={-1} className="min-h-screen flex flex-col items-center px-5 py-10">
       <div className="w-full max-w-md">
 
@@ -349,5 +396,6 @@ export default function FormPage() {
         </form>
       </div>
     </main>
+    </>
   )
 }

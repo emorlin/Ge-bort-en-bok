@@ -30,3 +30,21 @@
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-fade-up {
+  animation: fade-up 0.35s ease-out forwards;
+}
+
+@utility animate-page-enter {
+  animation: page-enter 0.45s ease-out forwards;
+}

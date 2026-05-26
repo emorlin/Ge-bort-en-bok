@@ -70,7 +70,7 @@ export default function ResultsPage() {
   ].filter(Boolean).join(' · ')
 
   return (
-    <main id="main-content" tabIndex={-1} className="min-h-screen flex flex-col items-center px-5 py-10">
+    <main id="main-content" tabIndex={-1} className="min-h-screen flex flex-col items-center px-5 py-10 animate-page-enter">
       <div className="w-full max-w-md">
 
         <div className="mb-7">
