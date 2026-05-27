@@ -19,12 +19,12 @@ function BookCover({ title, author }) {
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
-    const q = encodeURIComponent(`intitle:${title} inauthor:${author}`)
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&fields=items(volumeInfo/imageLinks/thumbnail)`)
+    const q = `title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}`
+    fetch(`https://openlibrary.org/search.json?${q}&limit=1&fields=cover_i`)
       .then(r => r.json())
       .then(data => {
-        const thumb = data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail
-        if (thumb) setSrc(thumb.replace('http:', 'https:'))
+        const coverId = data?.docs?.[0]?.cover_i
+        if (coverId) setSrc(`https://covers.openlibrary.org/b/id/${coverId}-M.jpg`)
         else setFailed(true)
       })
       .catch(() => setFailed(true))
