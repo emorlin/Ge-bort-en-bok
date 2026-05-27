@@ -62,7 +62,7 @@ No sign-up required. Nothing stored. Under 30 seconds.
 | React Router | 7 | Client-side routing with URL-based navigation |
 | Lucide React | — | SVG icons in nav, buttons, and loading animation |
 | Vercel Edge Functions | — | Serverless API handler for Claude calls |
-| Claude Sonnet | claude-sonnet-4-6 | AI recommendations |
+| Claude | Haiku 4.5 / Sonnet 4.6 | AI recommendations (configurable) |
 | Vercel | — | Hosting and automatic CI/CD from GitHub |
 
 ---
@@ -193,6 +193,25 @@ not the book in general. [...]
 ```
 
 `reason` is written in English and addressed to the buyer, not the recipient.
+
+---
+
+## Model configuration
+
+The AI model is set via a single constant at the top of `api/recommend.js`:
+
+```js
+// "claude-haiku-4-5-20251001"  — fast, cheap (~20× less than Sonnet)
+// "claude-sonnet-4-6"          — higher quality, higher cost
+const MODEL = "claude-haiku-4-5-20251001";
+```
+
+| Model | Cost per search | Quality |
+|---|---|---|
+| `claude-haiku-4-5-20251001` | ~$0.0003 | Good — occasionally less nuanced |
+| `claude-sonnet-4-6` | ~$0.005 | Best — more personal and varied |
+
+Change the constant and redeploy to switch models. No other changes needed.
 
 ---
 

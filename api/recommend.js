@@ -1,5 +1,11 @@
 export const config = { runtime: 'edge' };
 
+// ─── Model selection ──────────────────────────────────────────────────────────
+// "claude-haiku-4-5-20251001"  — fast, cheap (~20× less than Sonnet)
+// "claude-sonnet-4-6"          — higher quality, higher cost
+const MODEL = "claude-haiku-4-5-20251001";
+// ─────────────────────────────────────────────────────────────────────────────
+
 const SYSTEM_PROMPT = `You are an experienced bookseller recommending books as gifts.
 Choose real, well-known books that actually exist. Vary genre and style.
 Respond ONLY with valid JSON — no preamble, no markdown formatting.
@@ -59,7 +65,7 @@ export default async function handler(req) {
             "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-            model: "claude-sonnet-4-6",
+            model: MODEL,
             max_tokens: 1024,
             system: SYSTEM_PROMPT,
             messages: [{ role: "user", content: buildUserPrompt(body) }],
