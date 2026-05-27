@@ -28,7 +28,7 @@ Give exactly 4 book recommendations in this format:
 
 Important: always use the book's original title — never translate it.
 
-Choose ONLY well-known, real books with broad sales — bestsellers, award winners, or classics. Prefer a well-known book in a related area over an obscure book in exactly the right area.
+Every book must be real and verifiable — title, author, and year must be accurate. Vary the picks: mix well-known titles with hidden gems and newer releases. Avoid recommending the same handful of famous titles every time.
 
 Write reason in English. One sentence. Explain why this specific person — not the book in general. The text is for the buyer, not the recipient. Be specific about the recipient and the relationship. Avoid generic phrases like "a book for anyone who likes X". Be creative and personal in your recommendations!`;
 }
