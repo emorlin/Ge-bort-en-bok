@@ -22,7 +22,7 @@ export default function LoadingOverlay() {
       role="status"
       aria-live="polite"
       aria-label={MESSAGES[msgIndex]}
-      className="fixed inset-0 bg-background/85 backdrop-blur-sm flex flex-col items-center justify-center gap-10"
+      className="fixed inset-0 z-50 bg-bg/85 backdrop-blur-sm flex flex-col items-center justify-center gap-10"
     >
       <div className="bg-surface rounded-3xl shadow-card-lg px-10 py-10 flex flex-col items-center gap-8">
         <div className="flex gap-3" aria-hidden="true">
