@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { BookOpen } from 'lucide-react'
 import Logo from './Logo'
+import LoadingOverlay from './LoadingOverlay'
 
 function BookCover({ title, cover }) {
   const [failed, setFailed] = useState(false)
@@ -28,15 +29,15 @@ function BookCover({ title, cover }) {
 }
 
 function BookCard({ book }) {
-  const q           = encodeURIComponent(book.title + ' ' + book.author)
-  const amazonUrl      = `https://www.amazon.com/s?k=${q}`
-  const bookshopUrl    = `https://bookshop.org/search?keywords=${q}`
-  const googleUrl      = `https://books.google.com/books?q=${q}`
+  const q   = encodeURIComponent(book.title + ' ' + book.author)
+  const id  = book.isbn ? encodeURIComponent(book.isbn) : q
 
   const stores = [
-    { href: amazonUrl,   label: 'Amazon' },
-    { href: bookshopUrl, label: 'Bookshop.org' },
-    { href: googleUrl,   label: 'Google Books' },
+    { href: `https://www.amazon.com/s?k=${id}`,                label: 'Amazon' },
+    { href: `https://bookshop.org/search?keywords=${id}`,      label: 'Bookshop.org' },
+    { href: book.isbn
+        ? `https://books.google.com/books?isbn=${book.isbn}`
+        : `https://books.google.com/books?q=${q}`,             label: 'Google Books' },
   ]
 
   return (
@@ -110,6 +111,8 @@ export default function ResultsPage() {
   }
 
   return (
+    <>
+    {loading && <LoadingOverlay />}
     <main id="main-content" tabIndex={-1} className="min-h-screen flex flex-col items-center px-5 py-10 animate-page-enter">
       <div className="w-full max-w-md">
 
@@ -169,5 +172,6 @@ export default function ResultsPage() {
 
       </div>
     </main>
+    </>
   )
 }

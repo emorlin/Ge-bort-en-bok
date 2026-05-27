@@ -34,19 +34,26 @@ Write reason in English. One sentence. Explain why this specific person — not 
 }
 
 
-async function fetchCover(title, author) {
+async function fetchBookData(title, author) {
     try {
         const q = encodeURIComponent(`intitle:${title} inauthor:${author}`)
         const key = process.env.GOOGLE_BOOKS_API_KEY
         const res = await fetch(
-            `https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&fields=items(volumeInfo/imageLinks/thumbnail)&key=${key}`
+            `https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&fields=items(volumeInfo(imageLinks/thumbnail,industryIdentifiers))&key=${key}`
         )
-        if (!res.ok) return null
+        if (!res.ok) return { cover: null, isbn: null }
         const data = await res.json()
-        const thumb = data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail
-        return thumb ? thumb.replace('http:', 'https:') : null
+        const info = data?.items?.[0]?.volumeInfo
+        const thumb = info?.imageLinks?.thumbnail
+        const identifiers = info?.industryIdentifiers ?? []
+        const isbn13 = identifiers.find(i => i.type === 'ISBN_13')?.identifier ?? null
+        const isbn10 = identifiers.find(i => i.type === 'ISBN_10')?.identifier ?? null
+        return {
+            cover: thumb ? thumb.replace('http:', 'https:') : null,
+            isbn:  isbn13 ?? isbn10,
+        }
     } catch {
-        return null
+        return { cover: null, isbn: null }
     }
 }
 
@@ -113,10 +120,10 @@ export default async function handler(req) {
     }
 
     const books = await Promise.all(
-        parsed.books.map(async book => ({
-            ...book,
-            cover: await fetchCover(book.title, book.author),
-        }))
+        parsed.books.map(async book => {
+            const { cover, isbn } = await fetchBookData(book.title, book.author)
+            return { ...book, cover, isbn: isbn ?? book.isbn ?? null }
+        })
     );
 
     return new Response(JSON.stringify({ books }), {
