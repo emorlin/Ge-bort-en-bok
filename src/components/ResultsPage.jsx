@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { BookOpen } from 'lucide-react'
 import Logo from './Logo'
@@ -64,13 +65,36 @@ export default function ResultsPage() {
 
   if (!state?.books) return <Navigate to="/find" replace />
 
-  const { books, relation, giftType, interests, budget } = state
+  const { books: initialBooks, relation, giftType, interests, budget, age, occasion, freeText } = state
+
+  const [books,   setBooks]   = useState(initialBooks)
+  const [loading, setLoading] = useState(false)
+  const [error,   setError]   = useState(null)
 
   const summary = [
     interests.slice(0, 2).join(', '),
     giftType?.toLowerCase(),
     budget,
   ].filter(Boolean).join(' · ')
+
+  async function fetchNewRecommendations() {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetch('/api/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ relation, giftType, age, budget, interests, occasion, freeText }),
+      })
+      if (!res.ok) throw new Error('Something went wrong. Please try again.')
+      const data = await res.json()
+      setBooks(data.books)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <main id="main-content" tabIndex={-1} className="min-h-screen flex flex-col items-center px-5 py-10 animate-page-enter">
@@ -95,13 +119,28 @@ export default function ResultsPage() {
           ))}
         </ul>
 
-        <div className="mt-8">
+        {error && (
+          <div role="alert" className="mt-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+            {error}
+          </div>
+        )}
+
+        <div className="mt-8 flex flex-col items-center gap-3">
           <button
-            onClick={() => navigate('/find')}
-            className="w-full py-3.5 border border-rule rounded-2xl text-sm font-semibold text-ink hover:border-primary hover:text-primary transition-colors cursor-pointer bg-surface shadow-card"
+            onClick={fetchNewRecommendations}
+            disabled={loading}
+            aria-busy={loading}
+            className="w-full py-3.5 border border-rule rounded-2xl text-sm font-semibold text-ink hover:border-primary hover:text-primary disabled:opacity-50 transition-colors cursor-pointer bg-surface shadow-card"
           >
-            Search again
+            {loading ? 'Finding new picks…' : 'New recommendations'}
           </button>
+          <a
+            onClick={e => { e.preventDefault(); navigate('/find') }}
+            href="/find"
+            className="text-sm text-muted hover:text-primary transition-colors cursor-pointer"
+          >
+            ← New search
+          </a>
         </div>
 
         <dl className="mt-10 pt-8 border-t border-rule grid grid-cols-2 gap-4 text-center">

@@ -103,10 +103,14 @@ function FieldError({ id, message }) {
   )
 }
 
-function ChipGroup({ options, value, onChange, multi = false, labelId, required = false, groupRef, invalid = false, errorId }) {
+function ChipGroup({ options, value, onChange, multi = false, max, labelId, required = false, groupRef, invalid = false, errorId }) {
   function toggle(opt) {
     if (multi) {
-      onChange(value.includes(opt) ? value.filter(v => v !== opt) : [...value, opt])
+      if (value.includes(opt)) {
+        onChange(value.filter(v => v !== opt))
+      } else if (!max || value.length < max) {
+        onChange([...value, opt])
+      }
     } else {
       onChange(value === opt ? null : opt)
     }
@@ -125,6 +129,7 @@ function ChipGroup({ options, value, onChange, multi = false, labelId, required 
     >
       {options.map(opt => {
         const selected = multi ? value.includes(opt) : value === opt
+        const maxed = multi && max && value.length >= max && !selected
         return (
           <button
             key={opt}
@@ -132,10 +137,13 @@ function ChipGroup({ options, value, onChange, multi = false, labelId, required 
             role={multi ? 'checkbox' : 'radio'}
             aria-checked={selected}
             onClick={() => toggle(opt)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-150 cursor-pointer ${
+            disabled={maxed}
+            className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-150 ${
               selected
-                ? 'bg-primary text-white border-primary shadow-sm'
-                : 'bg-surface text-ink border-rule hover:border-primary hover:text-primary'
+                ? 'bg-primary text-white border-primary shadow-sm cursor-pointer'
+                : maxed
+                  ? 'bg-surface text-rule border-rule cursor-not-allowed'
+                  : 'bg-surface text-ink border-rule hover:border-primary hover:text-primary cursor-pointer'
             }`}
           >
             {opt}
@@ -208,7 +216,7 @@ export default function FormPage() {
       })
       if (!res.ok) throw new Error('Something went wrong. Please try again.')
       const data = await res.json()
-      navigate('/results', { state: { books: data.books, relation, giftType, interests: finalInterests, budget } })
+      navigate('/results', { state: { books: data.books, relation, giftType, interests: finalInterests, budget, age, occasion, freeText } })
     } catch (err) {
       setApiError(err.message)
     } finally {
@@ -315,12 +323,13 @@ export default function FormPage() {
           </div>
 
           <div>
-            <FieldLabel id="interests-label" required>Interests</FieldLabel>
+            <FieldLabel id="interests-label" required>Interests <span className="normal-case font-normal tracking-normal text-muted">pick up to 3</span></FieldLabel>
             <ChipGroup
               options={[...INTERESTS, 'Other']}
               value={interests}
               onChange={setInterests}
               multi
+              max={3}
               labelId="interests-label"
               required
               groupRef={interestsRef}
