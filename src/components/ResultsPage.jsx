@@ -34,7 +34,9 @@ function BookCard({ book }) {
 
   const stores = [
     { href: `https://www.amazon.com/s?k=${id}`,                label: 'Amazon' },
-    { href: `https://bookshop.org/search?keywords=${id}`,      label: 'Bookshop.org' },
+    { href: book.isbn
+        ? `https://bookshop.org/book/${book.isbn}`
+        : `https://bookshop.org/search?keywords=${q}`,          label: 'Bookshop.org' },
     { href: book.isbn
         ? `https://books.google.com/books?isbn=${book.isbn}`
         : `https://books.google.com/books?q=${q}`,             label: 'Google Books' },
