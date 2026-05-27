@@ -20,11 +20,15 @@ function BookCover({ title, author }) {
 
   useEffect(() => {
     const q = `title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}`
-    fetch(`https://openlibrary.org/search.json?${q}&limit=1&fields=cover_i`)
+    fetch(`https://openlibrary.org/search.json?${q}&limit=1&fields=isbn,cover_i`)
       .then(r => r.json())
       .then(data => {
-        const coverId = data?.docs?.[0]?.cover_i
-        if (coverId) setSrc(`https://covers.openlibrary.org/b/id/${coverId}-M.jpg`)
+        const doc = data?.docs?.[0]
+        const isbn    = doc?.isbn?.[0]
+        const coverId = doc?.cover_i
+        // ?default=false makes Open Library return 404 instead of a blank placeholder
+        if (isbn)    setSrc(`https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg?default=false`)
+        else if (coverId) setSrc(`https://covers.openlibrary.org/b/id/${coverId}-M.jpg?default=false`)
         else setFailed(true)
       })
       .catch(() => setFailed(true))
