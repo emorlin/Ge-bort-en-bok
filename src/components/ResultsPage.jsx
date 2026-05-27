@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { BookOpen } from 'lucide-react'
 import Logo from './Logo'
 
-function BookCover() {
+function BookCoverPlaceholder() {
   return (
     <div
       aria-hidden="true"
@@ -11,6 +11,34 @@ function BookCover() {
     >
       <BookOpen className="w-6 h-6 text-primary opacity-60" strokeWidth={1.5} />
     </div>
+  )
+}
+
+function BookCover({ title, author }) {
+  const [src,    setSrc]    = useState(null)
+  const [failed, setFailed] = useState(false)
+
+  useEffect(() => {
+    const q = encodeURIComponent(`intitle:${title} inauthor:${author}`)
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&fields=items(volumeInfo/imageLinks/thumbnail)`)
+      .then(r => r.json())
+      .then(data => {
+        const thumb = data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail
+        if (thumb) setSrc(thumb.replace('http:', 'https:'))
+        else setFailed(true)
+      })
+      .catch(() => setFailed(true))
+  }, [title, author])
+
+  if (failed || (!src)) return <BookCoverPlaceholder />
+
+  return (
+    <img
+      src={src}
+      alt={`Cover of ${title}`}
+      className="w-13 h-19 rounded-lg shadow-card shrink-0 object-cover"
+      onError={() => setFailed(true)}
+    />
   )
 }
 
@@ -28,7 +56,7 @@ function BookCard({ book }) {
 
   return (
     <article className="bg-surface rounded-2xl shadow-card p-5 flex gap-4">
-      <BookCover />
+      <BookCover title={book.title} author={book.author} />
       <div className="flex flex-col flex-1 min-w-0">
         <h2 className="font-display text-[17px] leading-snug text-ink">{book.title}</h2>
         <p className="text-xs text-muted mt-0.5 font-medium">
