@@ -36,8 +36,9 @@ Write reason in English. One sentence. Explain why this specific person — not 
 
 async function fetchBookData(title, author) {
     try {
-        const q = encodeURIComponent(`intitle:${title} inauthor:${author}`)
         const key = process.env.GOOGLE_BOOKS_API_KEY
+        if (!key) return { cover: null, isbn: null }
+        const q = encodeURIComponent(`intitle:${title} inauthor:${author}`)
         const res = await fetch(
             `https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&fields=items(volumeInfo(imageLinks/thumbnail,industryIdentifiers))&key=${key}`
         )

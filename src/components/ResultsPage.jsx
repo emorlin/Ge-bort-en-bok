@@ -79,15 +79,21 @@ export default function ResultsPage() {
   const { state } = useLocation()
   const navigate  = useNavigate()
 
-  if (!state?.books) return <Navigate to="/find" replace />
+  const relation  = state?.relation
+  const giftType  = state?.giftType
+  const interests = state?.interests ?? []
+  const budget    = state?.budget
+  const age       = state?.age
+  const occasion  = state?.occasion
+  const freeText  = state?.freeText
 
-  const { books: initialBooks, relation, giftType, interests, budget, age, occasion, freeText } = state
-
-  const [books,   setBooks]   = useState(initialBooks)
+  const [books,   setBooks]   = useState(state?.books ?? [])
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState(null)
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
+
+  if (!state?.books) return <Navigate to="/find" replace />
 
   const summary = [
     interests.slice(0, 2).join(', '),
@@ -133,8 +139,8 @@ export default function ResultsPage() {
         </div>
 
         <ul className="flex flex-col gap-4 list-none">
-          {books.map((book, i) => (
-            <li key={i}>
+          {books.map(book => (
+            <li key={book.title}>
               <BookCard book={book} />
             </li>
           ))}
@@ -164,16 +170,6 @@ export default function ResultsPage() {
           </a>
         </div>
 
-        <dl className="mt-10 pt-8 border-t border-rule grid grid-cols-2 gap-4 text-center">
-          <div>
-            <dd className="font-display text-4xl text-primary">5 832</dd>
-            <dt className="text-xs text-muted mt-1">books recommended</dt>
-          </div>
-          <div>
-            <dd className="font-display text-4xl text-primary">1 204</dd>
-            <dt className="text-xs text-muted mt-1">unique titles</dt>
-          </div>
-        </dl>
 
       </div>
     </main>

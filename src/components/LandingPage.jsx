@@ -54,7 +54,7 @@ export default function LandingPage() {
 
         <div className="mt-8 flex justify-center">
           <a
-            href="https://github.com/emorlin/Ge-bort-en-bok"
+            href="https://github.com/emorlin/bookgift"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-[12px] text-muted hover:text-primary transition-colors"

@@ -109,7 +109,6 @@ function ChipGroup({ options, value, onChange, multi = false, max, labelId, requ
 }
 
 const inputClass = "w-full bg-surface border border-rule rounded-xl px-4 py-3 text-base text-ink placeholder-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-primary transition-colors"
-const inputClassInvalid = "w-full bg-surface border border-red-400 rounded-xl px-4 py-3 text-base text-ink placeholder-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40 focus-visible:border-red-500 transition-colors"
 
 export default function FormPage() {
   const navigate = useNavigate()
@@ -128,13 +127,10 @@ export default function FormPage() {
 
   const relationRef  = useRef(null)
   const giftTypeRef  = useRef(null)
-  const budgetRef    = useRef(null)
   const interestsRef = useRef(null)
-  const errorSummaryRef = useRef(null)
 
   const step = [relation, giftType, interests.length > 0].filter(Boolean).length
 
-  // Beräkna fel — visas bara efter att användaren försökt skicka
   const errors = {
     relation:  !relation            ? 'Select who you are buying for.'        : null,
     giftType:  !giftType            ? 'Select what the gift should express.'  : null,
@@ -148,7 +144,6 @@ export default function FormPage() {
     setSubmitted(true)
     setApiError(null)
 
-    // Flytta fokus till sammanfattning om det finns fel — role="alert" annonserar till skärmläsare
     if (!relation || !giftType || interests.length < 1) {
       setTimeout(() => {
         if (!relation)            { relationRef.current?.focus();  return }
@@ -190,7 +185,6 @@ export default function FormPage() {
 
         <ProgressBar step={step} />
 
-        {/* Felsammanfattning — annonseras av skärmläsare via role="alert" */}
         {submitted && hasErrors && (
           <div
             ref={errorSummaryRef}
@@ -265,7 +259,6 @@ export default function FormPage() {
               </label>
               <select
                 id="budget"
-                ref={budgetRef}
                 value={budget}
                 onChange={e => setBudget(e.target.value)}
                 className={inputClass}
