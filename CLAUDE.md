@@ -1,91 +1,73 @@
-# Ge bort en bok
+# BookGift
 
-Webb-app på gebortenbok.se som hjälper användare hitta rätt bok som present. Användaren fyller i ett kort formulär om mottagaren; appen returnerar 4 konkreta bokförslag med motivering och köplänkar till svenska bokhandlare.
+Web app at bookgift.app that helps users find the right book as a gift. The user fills in a short form about the recipient; the app returns 4 concrete book suggestions with reasoning and buy links.
 
 ## Tech stack
 
-| Del | Val |
+| Part | Choice |
 |---|---|
 | Frontend | React + Vite |
-| Styling | Tailwind CSS |
+| Styling | Tailwind CSS v4 |
 | Backend | Vercel Edge Functions |
-| AI | Claude API (claude-sonnet-4-6) |
-| Bokdata | Google Books API (omslag + metadata) |
+| AI | Claude API (configurable: Haiku 4.5 or Sonnet 4.6) |
+| Book covers | Google Books API (server-side, with placeholder fallback) |
 | Hosting | Vercel |
-| Databas | Ingen i MVP |
+| Database | None |
 
-## Tre vyer
+## Three views
 
-- **Vy 1 – Landing:** Tagline, CTA-knapp, tre-stegsförklaring, trustsignaler
-- **Vy 2 – Formulär:** Relation (chips), Presenttyp (chips), Ålder (fritext), Budget (dropdown), Intressen (chips, flerval), Tillfälle (dropdown), Fritext (textarea)
-- **Vy 3 – Resultat:** 4 bokkort med omslag, titel, författare, motivering, köplänkar till Bokus och Adlibris
+- **View 1 – Landing (`/`):** Tagline, CTA button, three-step explanation, trust signals
+- **View 2 – Form (`/find`):** Relation (chips), Gift type (chips), Age (number), Budget (dropdown), Interests (chips, multi-select max 3), Occasion (dropdown), Free text (textarea)
+- **View 3 – Results (`/results`):** 4 book cards with cover art, title, author, year, reasoning, buy links (Amazon, Bookshop.org, Google Books). "New recommendations" re-fetches with same form data. "← New search" returns to form.
 
-## Scope-beslut (MVP)
+## Form fields and validation
 
-- Bokomslag: Google Books API direkt (inte placeholder)
-- Statistik: hårdkodade dummy-siffror nu, riktig data i fas 2
-- Dela-listan: skippad i MVP
-- Budget-fält: dropdown (inte fritext)
-- Barnflöde (under 12 år): ej implementerat
-
-## Byggordning
-
-1. Scaffolda React + Vite + Tailwind
-2. Vy 1 — Landing page
-3. Vy 2 — Formulär med validering
-4. Vercel Edge Function med mock-svar (redo för riktig nyckel)
-5. Google Books API-integration för omslag
-6. Vy 3 — Resultatsida
-7. Köplänkar Bokus/Adlibris
-8. Laddningsstate, felhantering, mobilanpassning
-9. Deploy till Vercel
-
-## Status
-
-- [ ] Projekt scaffoldat
-- [ ] Vy 1 klar
-- [ ] Vy 2 klar
-- [ ] Edge Function uppsatt (mock)
-- [ ] Google Books API kopplat
-- [ ] Vy 3 klar
-- [ ] Deploy
-
-## Pending
-
-- **Claude API-nyckel:** saknas tills vidare — Edge Function byggs med mock-svar och byter till riktig nyckel via env-variabel när den finns
-- **Google Books API-nyckel:** gratis via Google Cloud Console, behövs innan deploy
-- **Vercel-konto:** behövs inför deploy
-
-## Formfält och valideringsregler
-
-| Fält | Typ | Obligatoriskt |
+| Field | Type | Required |
 |---|---|---|
-| Relation | Chips (välj en) | Ja |
-| Presenttyp | Chips (välj en) | Ja |
-| Ålder | Fritext (siffra) | Nej |
-| Budget | Dropdown | Ja |
-| Intressen | Chips (välj minst ett) | Ja |
-| Tillfälle | Dropdown | Nej |
-| Fritext | Textarea | Nej |
+| Who are you buying for? | Chips (pick one) | Yes |
+| What should the gift express? | Chips (pick one) | Yes |
+| Age | Number | No |
+| Budget | Dropdown | No |
+| Interests | Chips (multi-select, max 3) | Yes |
+| Occasion | Dropdown | No |
+| Anything else about the person? | Textarea | No |
 
-Felmeddelanden visas inline under knappen. Inga fält markeras rött förrän användaren försökt skicka.
+Errors only shown after first submit attempt.
 
-## Prompt-arkitektur (Claude)
+## AI prompt architecture
 
-Systeminstruktion är fast. Användarinstruktion byggs dynamiskt från formulärdata. Svar ska vara giltig JSON utan preamble:
+System prompt is fixed. User prompt is built dynamically from form data. Response must be valid JSON without preamble:
 
 ```json
 {"books":[{"title":"...","author":"...","year":2019,"isbn":"...","reason":"..."}]}
 ```
 
-`reason` skrivs på svenska, en mening, förklarar varför just denna person — inte boken generellt.
+`reason` is written in English, one sentence, explains why this specific person — not the book in general.
 
-## Köplänkar
+## Model selection
 
-Söklänkar baserade på titel + författare:
-- Bokus: `https://www.bokus.com/cgi-bin/product_search.cgi?search_word={titel}+{författare}`
-- Adlibris: `https://www.adlibris.com/se/sok?search={titel}+{författare}`
+Single constant at top of `api/recommend.js`:
 
-## Specifikation
+```js
+const MODEL = "claude-haiku-4-5-20251001"; // or "claude-sonnet-4-6"
+```
 
-Full produktspec finns i `bokpresent-produktspec_2.md`.
+## Book covers
+
+Fetched server-side in `api/recommend.js` via Google Books API using `GOOGLE_BOOKS_API_KEY`. All 4 covers fetched in parallel via `Promise.all`. Returns `null` on failure — client falls back to BookOpen icon placeholder.
+
+## Buy links
+
+Search links based on title + author:
+- Amazon: `https://www.amazon.com/s?k={q}`
+- Bookshop.org: `https://bookshop.org/search?keywords={q}`
+- Google Books: `https://books.google.com/books?q={q}`
+
+## Environment variables
+
+```bash
+ANTHROPIC_API_KEY=sk-ant-...
+GOOGLE_BOOKS_API_KEY=AIza...
+```
+
+Pull locally with `vercel env pull`.

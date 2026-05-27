@@ -45,6 +45,7 @@ No sign-up required. Nothing stored. Under 30 seconds.
 |---|---|
 | **AI recommendations** | Claude picks 4 books based on relationship, interests, gift purpose, and budget. Recommendations are personal and varied — not the same famous titles every time |
 | **Personal reasoning** | Each book gets a one-sentence explanation for *why this specific person* suits the book |
+| **Book covers** | Cover art fetched server-side from Google Books API. Falls back to a styled placeholder icon if no cover is found |
 | **Buy links** | Direct search links to Amazon, Bookshop.org, and Google Books for every title |
 | **Loading animation** | Animated overlay with cycling status messages while the AI works — no blank screen |
 | **No database** | No accounts, no storage, no cookies. Everything lives in React Router location state and disappears on close |
@@ -63,6 +64,7 @@ No sign-up required. Nothing stored. Under 30 seconds.
 | Lucide React | — | SVG icons in nav, buttons, and loading animation |
 | Vercel Edge Functions | — | Serverless API handler for Claude calls |
 | Claude | Haiku 4.5 / Sonnet 4.6 | AI recommendations (configurable) |
+| Google Books API | — | Book cover images, fetched server-side |
 | Vercel | — | Hosting and automatic CI/CD from GitHub |
 
 ---
@@ -113,7 +115,7 @@ A step indicator (progress bar) at the top shows how many required fields have b
 
 ### View 3 — Results (`/results`)
 
-Four book cards with placeholder icon, title, author, year, reasoning, and buy links. The page fades in with a smooth animation. A "New recommendations" button re-calls the API with the same form data for a fresh set of picks. A "← New search" link below returns to the form.
+Four book cards with cover art (from Google Books API, with placeholder fallback), title, author, year, reasoning, and buy links. The page fades in with a smooth animation. A "New recommendations" button re-calls the API with the same form data for a fresh set of picks. A "← New search" link below returns to the form.
 
 If the user navigates directly to `/results` without state they are redirected to `/find`.
 
@@ -359,9 +361,10 @@ Create `.env.local` in the project root (never committed):
 
 ```bash
 ANTHROPIC_API_KEY=sk-ant-...
+GOOGLE_BOOKS_API_KEY=AIza...
 ```
 
-Also add the variable in the Vercel Dashboard under **Settings → Environment Variables** for production deployments.
+Also add both variables in the Vercel Dashboard under **Settings → Environment Variables** for production deployments. To pull them locally after adding: `vercel env pull`.
 
 ---
 
