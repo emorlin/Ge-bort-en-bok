@@ -1,6 +1,8 @@
 # BookGift
 
 > AI-powered book gift recommendations — the right book, for the right person.
+> 
+> Live demo here: https://emorlin-bookgift.vercel.app/
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white&labelColor=20232A)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
@@ -12,22 +14,40 @@
 
 ## Contents
 
-- [What is BookGift?](#what-is-bookgift)
-- [Features](#features)
-- [Tech stack](#tech-stack)
-- [Architecture](#architecture)
-- [Three views](#three-views)
-- [Form fields and validation](#form-fields-and-validation)
-- [AI prompt architecture](#ai-prompt-architecture)
-- [Security](#security)
-- [Loading animation](#loading-animation)
-- [Buy links](#buy-links)
-- [Accessibility](#accessibility)
-- [Design system](#design-system)
-- [Getting started](#getting-started)
-- [Environment variables](#environment-variables)
-- [Build and deploy](#build-and-deploy)
-- [Project structure](#project-structure)
+- [BookGift](#bookgift)
+  - [Contents](#contents)
+  - [What is BookGift?](#what-is-bookgift)
+  - [Features](#features)
+  - [Tech stack](#tech-stack)
+  - [Architecture](#architecture)
+  - [Three views](#three-views)
+    - [View 1 — Landing (`/`)](#view-1--landing-)
+    - [View 2 — Form (`/find`)](#view-2--form-find)
+    - [View 3 — Results (`/results`)](#view-3--results-results)
+  - [Form fields and validation](#form-fields-and-validation)
+  - [AI prompt architecture](#ai-prompt-architecture)
+    - [System prompt](#system-prompt)
+    - [Dynamic user prompt (example)](#dynamic-user-prompt-example)
+    - [Response format](#response-format)
+  - [Model configuration](#model-configuration)
+  - [Security](#security)
+  - [Loading animation](#loading-animation)
+  - [Buy links](#buy-links)
+  - [Accessibility](#accessibility)
+  - [Design system](#design-system)
+    - [Colour palette](#colour-palette)
+    - [Typography](#typography)
+    - [Animations](#animations)
+    - [Shadows](#shadows)
+  - [Getting started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Available commands](#available-commands)
+  - [Environment variables](#environment-variables)
+  - [Build and deploy](#build-and-deploy)
+    - [Deploy to Vercel](#deploy-to-vercel)
+    - [Edge Function](#edge-function)
+  - [Project structure](#project-structure)
 
 ---
 
